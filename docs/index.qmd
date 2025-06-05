@@ -30,8 +30,8 @@ library(ggplot2)
 library(dplyr)
 library(tidyr)
 library(gt)
-clean_data <- read.csv("/cloud/project/R/data/processed/clean.csv")
-distance_tbl <- read.csv("/cloud/project/R/data/final/distance_tbl.csv")
+clean_data <- read.csv("/cloud/project/data/processed/clean.csv")
+distance_tbl <- read.csv("/cloud/project/data/final/distance_tbl.csv")
 ```
 
 # Introduction

@@ -74,7 +74,7 @@ print(names(clean_data)[list_cols])
 
 clean_data <- clean_data[ , !list_cols]
 
-write.csv(clean_data, "R/data/processed/clean.csv")
+write.csv(clean_data, "data/processed/clean.csv")
 
 levels_distance <- c("0 - 500m", "501 - 1000m", "1001 - 2000m", "2000m +")
 
@@ -90,5 +90,5 @@ distance_tbl <- clean_data_lvl %>%
             "mean recycling quota" = mean(recycling_percentage),
             "sd recycling quota" = sd(recycling_percentage))
 
-write.csv(distance_tbl, "R/data/final/distance_tbl.csv")
+write.csv(distance_tbl, "data/final/distance_tbl.csv")
 
