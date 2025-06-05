@@ -44,6 +44,8 @@ A survey was developed using Google Forms to collect data on participants demogr
 
 # Results
 
+## Correlation between living distance and recycling rate
+
 ```{r}
 #| fig-cap: Percentage of recycled glass by distance to recycling station
 #| label: fig-distance
@@ -86,6 +88,8 @@ distance_tbl %>%
 ```
 
 In @tbl-distance it can be seen that the recycling quota is above 75% for all groups. On average, participants buy just shy of 2 glass container per week. The majority of participants live within a kilometer from the next recycling station, with the maximum distance being 4 kilometers reported by one participant.
+
+## Demographics
 
 ```{r}
 #| fig-cap: Percentage of recycled glass by age of participants
@@ -131,6 +135,8 @@ write.csv(edu_plot, "/cloud/project/data/final/edu_plot.csv")
 ```
 
 @fig-count shows that the vast majority of the participants recycles all of their glass waste. A difference based on the highest education level cannot be observed. The high recycling percentage seems very realistic, as, according to @Vetroswiss2023, 97% of all glass waste gets recycled in Switzerland.
+
+## Opinions on measures for improving recycling rate
 
 ```{r}
 #| fig-cap: Agreement of participants to statement:\nI would recycle more if my way to the next recycling station was shorter.
