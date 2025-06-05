@@ -173,6 +173,7 @@ geom_histogram() +
     fill = "Currently a Student?") +
   theme_minimal()
 write.csv(dep_opi_plot, "/cloud/project/data/final/dep_opi_plot.csv")
+
 ```
 
 When asked about another measure for increasing the recycling rate, a deposit on glass containers that you only get back when you return the container, the participants showed to be clearly in favour, as is shown in @fig-deposit-opinion. Support for the deposit idea is congruent with a study done in croatia (@maguc2023). In contrast to the statement regarding the living distance, the statement on the deposit scheme was formulated more broadly, asking about the impact on the general recycling rate instead of the individual recycling behaviour. This different formulation might have influenced the results and should be avoided in the future.
