@@ -1,0 +1,181 @@
+---
+title: "Examining the correlation between living distance to the nearest recycling stations and the personal glass recycling rate of Swiss residents"
+date: today
+author:
+  - name: Fabian Oliver Zangger
+    orcid: 0009-0004-7458-1503
+    email: zanggerf@ethz.ch
+    affiliation: 
+      - name: ETH Zürich
+        url: ethz.ch
+toc: true
+license: "CC BY"
+#citation: 
+#  container-title: My Blog
+#  url: https://www.example.com
+bibliography: references.bib
+#csl: apa.csl
+editor: visual
+format:
+  html:
+    embed-resources: true
+    documentclass: article
+execute: 
+  warning: false
+  echo: true
+---
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(gt)
+clean_data <- read.csv("/cloud/project/R/data/processed/clean.csv")
+distance_tbl <- read.csv("/cloud/project/R/data/final/distance_tbl.csv")
+```
+
+# Introduction
+
+This report was written for the course *Research Beyond the Lab* as part of the Mechanical Engineering program at ETH Zurich. A survey on glass waste management was designed and carried out, and the resulting data were analyzed using the R programming language. Given that glass is a highly recyclable resource with minimal degradation over cycles (@Vetropack2010), understanding and improving recycling behavior is crucial. The study investigates the potential correlation between a participants living distance to the nearest glass recycling station and the proportion of glass waste they recycle. Additionally, perceptions of measures to improve recycling rates are evaluated.
+
+# Methods
+
+A survey was developed using Google Forms to collect data on participants demographics and glass recycling behaviors. The participants had to estimate the amount of glass containers they aquired in an average week, how many of them they recycled and how far they lived from the closest glass recycling collection point. The survey link was distributed on the author’s personal social media account and remained accessible for 24 hours, during which over 50 responses were recorded. The sample primarily consisted of Swiss residents aged 19 to 40 with differing educational backgrounds. However, the sample may exhibit bias and limited diversity, as all participants have a personal connection to the author and are from the broader Zurich region.
+
+# Results
+
+```{r}
+#| fig-cap: Percentage of recycled glass by distance to recycling station
+#| label: fig-distance
+
+ggplot(clean_data,
+       mapping = aes(x = travel_distance,
+                     y = recycling_percentage,
+                     color = transport_method,
+                     shape = transport_method
+                     )) +
+  geom_point(position = position_jitter()) + 
+  labs(title = "Recycling Quota by Distance",
+    subtitle = "Percentage of recycled glass relative to\ndistance to nearest recycling station (r.s.)",
+    x = "Distance to r.s. (meters)",
+    y = "Recycling Quota (%)",
+    color = "Transport Method",
+    shape = "Transport Method") +
+  theme_minimal()
+```
+
+In @fig-distance it is not possible to detect a correlation between the living distance and the recycling rate of the participants, which would suggest that the living distance does not affect the recycling habits of the participants. It can be seen that the participants living further from a recycling station tend to prefer traveling there by car, which was to be expected. The preferred methods of transportation is by foot and by car, which makes sense when one considers the challenges of transporting heavy bags by bike.
+
+```{r}
+#| fig-cap: The count of participants, the mean of glass containers bought and recycled and the mean and standard deviattion of the recycling quota grouped by living distance to the nearest recycling station.
+#| label: tbl-distance
+
+distance_tbl %>% 
+    gt() %>% 
+    cols_hide(columns = X) %>% 
+    tab_header(title = "Glass recycling key variables",
+               subtitle = "Glass recycling quota grouped by distance to nearest recycling station.") %>% 
+    fmt_number(columns = mean.bought.bottles:sd.recycling.quota, decimals = 1) %>% 
+    cols_label(distance_group = "living distance",
+               mean.bought.bottles = "mean bought bottles",
+               mean.recycled.bottles = "mean recycled bottles",
+               mean.recycling.quota = "mean recycling quota",
+               sd.recycling.quota = "sd recycling quota")
+```
+
+In @tbl-distance it can be seen that the recycling quota is above 75% for all groups. On average, participants buy just shy of 2 glass container per week. The majority of participants live within a kilometer from the next recycling station, with the maximum distance being 4 kilometers reported by one participant.
+
+```{r}
+#| fig-cap: Percentage of recycled glass by age of participants
+#| label: fig-age
+
+ggplot(clean_data,
+       mapping = aes(x = age,
+                     y = recycling_percentage,
+                     shape = gender,
+                     color = student_state
+                     )) +
+  geom_point(position = position_jitter()) + 
+  labs(title = "Recycling Quota by Age",
+    #subtitle = "Percentage of recycled glass relative to\nage of participants",
+    x = "Age (years)",
+    y = "Recycling Quota (%)",
+    shape = "Gender",
+    color = "University Student") +
+  theme_minimal()
+```
+
+@fig-age suggests that people in their twenties are the worst at recycling, but that is probably just because that age group represents the vast majority of participants. Similar arguments can be made for the apparent findings that women and students recycle a lower percentage of their glass waste than men and non-students respectively; they represent the larger part of the sample group.
+
+```{r}
+#| fig-cap: Distribution of recycling quota among participants by education level
+#| label: fig-count
+
+
+ggplot(clean_data,
+      mapping = aes(x = recycling_percentage,
+                    fill = edu_lvl)) +
+geom_histogram() +
+    labs(title = "Recycling Quota by Education level",
+    subtitle = "Distribution of recycling quota among participants",
+    x = "Recycling Quota (%)",
+    y = "Count",
+    fill = "Highest education level") +
+  theme_minimal()
+```
+
+@fig-count shows that the vast majority of the participants recycles all of their glass waste. A difference based on the highest education level cannot be observed. The high recycling percentage seems very realistic, as, according to @Vetroswiss2023, 97% of all glass waste gets recycled in Switzerland.
+
+```{r}
+#| fig-cap: Agreement of participants to statement:\nI would recycle more if my way to the next recycling station was shorter.
+#| label: fig-distance-opinion
+
+ggplot(clean_data,
+      mapping = aes(x = distance_opinion,
+                    fill = student_state)) +
+geom_histogram() +
+    labs(title = "Opinion on living distance impact",
+    x = "1 = strong disagree, 5 = strong agree",
+    y = "Count",
+    fill = "Currently a Student?") +
+  theme_minimal()
+```
+
+In @fig-distance-opinion, participants were asked wether living closer to a recycling station would motivate them to recycle more of their glass waste. The responses ver evenly distributed from "strongly disagree" to "strongly agree" with an ever so slight bias towards "strongly agree". A possible explanation might be that most participants already recycle all of their glass waste, which is why they couldn't recycle more even if they wanted to.
+
+```{r}
+#| fig-cap: Agreement of participants to statement:\nDo you think a deposit on glass bottles would increase the percentage of bottles being returned correctly for recycling?
+#| label: fig-deposit-opinion
+
+ggplot(clean_data,
+      mapping = aes(x = deposit_opinion,
+                    fill = student_state)) +
+geom_histogram() +
+    labs(title = "Opinion on deposit impact",
+    x = "1 = strong disagree, 5 = strong agree",
+    y = "Count",
+    fill = "Currently a Student?") +
+  theme_minimal()
+```
+
+When asked about another measure for increasing the recycling rate, a deposit on glass containers that you only get back when you return the container, the participants showed to be clearly in favour, as is shown in @fig-deposit-opinion. Support for the deposit idea is congruent with a study done in croatia (@maguc2023). In contrast to the statement regarding the living distance, the statement on the deposit scheme was formulated more broadly, asking about the impact on the general recycling rate instead of the individual recycling behaviour. This different formulation might have influenced the results and should be avoided in the future.
+
+# Conclusions
+
+-   The survey was conducted with a little over 50 participants mainly consisting of swiss residents of age 19 - 40 with a personal connection to the author.
+
+-   No clear correlation between living distance to the closest recycling station and recycling rate of glass waste could be found.
+
+-   The self reported recycling rate was overall high, which could be explained by the assumption that people who take their time to respond to a survey also take time to recycle their waste.
+
+-   No significant differences in the recycling habits based on gender, age or education level could be observed.
+
+-   Mixed agreement by participants on the hypothesis that living distance impacts the recycling rate.
+
+-   Strong agreement among participants about the effectiveness of a deposit scheme for glass waste, consensus that it would improve recycling rate.
+
+-   Further research could focus on recycling rates of other waste products (aluminium cans, batteries etc.) or examine the effectiveness of a deposit scheme.
+
+-   With a nationwide recycling rate of 97% in Switzerland, glass waste recycling is already very efficient and difficult to improve. Other ressources with a lower recycling rate might have been a more suitable choice for this study.
+
+# References
