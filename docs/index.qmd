@@ -48,7 +48,8 @@ A survey was developed using Google Forms to collect data on participants demogr
 #| fig-cap: Percentage of recycled glass by distance to recycling station
 #| label: fig-distance
 
-ggplot(clean_data,
+distance_plot <- clean_data
+ggplot(distance_plot,
        mapping = aes(x = travel_distance,
                      y = recycling_percentage,
                      color = transport_method,
@@ -62,6 +63,7 @@ ggplot(clean_data,
     color = "Transport Method",
     shape = "Transport Method") +
   theme_minimal()
+write.csv(distance_plot, "/cloud/project/data/final/distance_plot.csv")
 ```
 
 In @fig-distance it is not possible to detect a correlation between the living distance and the recycling rate of the participants, which would suggest that the living distance does not affect the recycling habits of the participants. It can be seen that the participants living further from a recycling station tend to prefer traveling there by car, which was to be expected. The preferred methods of transportation is by foot and by car, which makes sense when one considers the challenges of transporting heavy bags by bike.
@@ -89,7 +91,9 @@ In @tbl-distance it can be seen that the recycling quota is above 75% for all gr
 #| fig-cap: Percentage of recycled glass by age of participants
 #| label: fig-age
 
-ggplot(clean_data,
+age_plot <- clean_data
+
+ggplot(age_plot,
        mapping = aes(x = age,
                      y = recycling_percentage,
                      shape = gender,
@@ -103,6 +107,7 @@ ggplot(clean_data,
     shape = "Gender",
     color = "University Student") +
   theme_minimal()
+write.csv(age_plot, "/cloud/project/data/final/age_plot.csv")
 ```
 
 @fig-age suggests that people in their twenties are the worst at recycling, but that is probably just because that age group represents the vast majority of participants. Similar arguments can be made for the apparent findings that women and students recycle a lower percentage of their glass waste than men and non-students respectively; they represent the larger part of the sample group.
@@ -111,8 +116,8 @@ ggplot(clean_data,
 #| fig-cap: Distribution of recycling quota among participants by education level
 #| label: fig-count
 
-
-ggplot(clean_data,
+edu_plot <- clean_data
+ggplot(edu_plot,
       mapping = aes(x = recycling_percentage,
                     fill = edu_lvl)) +
 geom_histogram() +
@@ -122,6 +127,7 @@ geom_histogram() +
     y = "Count",
     fill = "Highest education level") +
   theme_minimal()
+write.csv(edu_plot, "/cloud/project/data/final/edu_plot.csv")
 ```
 
 @fig-count shows that the vast majority of the participants recycles all of their glass waste. A difference based on the highest education level cannot be observed. The high recycling percentage seems very realistic, as, according to @Vetroswiss2023, 97% of all glass waste gets recycled in Switzerland.
@@ -130,7 +136,9 @@ geom_histogram() +
 #| fig-cap: Agreement of participants to statement:\nI would recycle more if my way to the next recycling station was shorter.
 #| label: fig-distance-opinion
 
-ggplot(clean_data,
+dist_opi_plot <- clean_data
+
+ggplot(dist_opi_plot,
       mapping = aes(x = distance_opinion,
                     fill = student_state)) +
 geom_histogram() +
@@ -139,6 +147,7 @@ geom_histogram() +
     y = "Count",
     fill = "Currently a Student?") +
   theme_minimal()
+write.csv(dist_opi_plot, "/cloud/project/data/final/dist_opi_plot.csv")
 ```
 
 In @fig-distance-opinion, participants were asked wether living closer to a recycling station would motivate them to recycle more of their glass waste. The responses ver evenly distributed from "strongly disagree" to "strongly agree" with an ever so slight bias towards "strongly agree". A possible explanation might be that most participants already recycle all of their glass waste, which is why they couldn't recycle more even if they wanted to.
@@ -147,7 +156,8 @@ In @fig-distance-opinion, participants were asked wether living closer to a recy
 #| fig-cap: Agreement of participants to statement:\nDo you think a deposit on glass bottles would increase the percentage of bottles being returned correctly for recycling?
 #| label: fig-deposit-opinion
 
-ggplot(clean_data,
+dep_opi_plot <- clean_data 
+ggplot(dep_opi_plot,
       mapping = aes(x = deposit_opinion,
                     fill = student_state)) +
 geom_histogram() +
@@ -156,6 +166,7 @@ geom_histogram() +
     y = "Count",
     fill = "Currently a Student?") +
   theme_minimal()
+write.csv(dep_opi_plot, "/cloud/project/data/final/dep_opi_plot.csv")
 ```
 
 When asked about another measure for increasing the recycling rate, a deposit on glass containers that you only get back when you return the container, the participants showed to be clearly in favour, as is shown in @fig-deposit-opinion. Support for the deposit idea is congruent with a study done in croatia (@maguc2023). In contrast to the statement regarding the living distance, the statement on the deposit scheme was formulated more broadly, asking about the impact on the general recycling rate instead of the individual recycling behaviour. This different formulation might have influenced the results and should be avoided in the future.
